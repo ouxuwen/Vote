@@ -1,0 +1,127 @@
+@import "./normalize.css";
+// main,header,div{
+//     border:1px solid red;
+// }
+.container {
+  max-width: 750px;
+  min-height: 100vh;
+
+  margin: 0 auto;
+  header {
+    height: 200px;
+  }
+  .summary {
+    display: flex;
+    height: 80px;
+    > div {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    p {
+      margin-top: 10px;
+    }
+  }
+}
+
+.masonry {
+  width: 100%;
+  margin-top: 50px;
+  position: relative;
+  .item {
+    z-index: 10;
+    overflow: hidden;
+    position: absolute;
+    transition: all 0.25s;
+    box-sizing: border-box;
+    padding: 2px;
+    img {
+      width: 100%;
+    }
+    p {
+      padding: 5px;
+      font-size: 13px;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* set up the keyframes */
+@keyframes nodeInserted {
+  from {
+    clip: rect(1px, auto, auto, auto);
+  }
+  to {
+    clip: rect(0px, auto, auto, auto);
+  }
+}
+
+@-moz-keyframes nodeInserted {
+  from {
+    clip: rect(1px, auto, auto, auto);
+  }
+  to {
+    clip: rect(0px, auto, auto, auto);
+  }
+}
+
+@-webkit-keyframes nodeInserted {
+  from {
+    clip: rect(1px, auto, auto, auto);
+  }
+  to {
+    clip: rect(0px, auto, auto, auto);
+  }
+}
+
+@-ms-keyframes nodeInserted {
+  from {
+    clip: rect(1px, auto, auto, auto);
+  }
+  to {
+    clip: rect(0px, auto, auto, auto);
+  }
+}
+
+@-o-keyframes nodeInserted {
+  from {
+    clip: rect(1px, auto, auto, auto);
+  }
+  to {
+    clip: rect(0px, auto, auto, auto);
+  }
+}
+
+#masonry > .item {
+  margin-bottom: 10px;
+  animation-duration: 0.001s;
+  -o-animation-duration: 0.001s;
+  -ms-animation-duration: 0.001s;
+  -moz-animation-duration: 0.001s;
+  -webkit-animation-duration: 0.001s;
+  animation-name: nodeInserted;
+  -o-animation-name: nodeInserted;
+  -ms-animation-name: nodeInserted;
+  -moz-animation-name: nodeInserted;
+  -webkit-animation-name: nodeInserted;
+}
+
+#loading {
+  padding: 0;
+  text-align: center;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    width: 80px;
+  }
+  &.show {
+    opacity: 1;
+  }
+}
