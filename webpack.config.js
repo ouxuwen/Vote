@@ -34,11 +34,11 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
-    port: 9001,
+    port: 80,
     proxy: {
       "/sf":{target: "https://m.baidu.com/", secure: false}
-     
-    }
+    },
+    disableHostCheck: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

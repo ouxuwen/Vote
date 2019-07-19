@@ -74,6 +74,7 @@ let votePm = {
             pageNo:1,
             pageSize:20
         }
+        that.loadData();
     })
 
     //投票事件
