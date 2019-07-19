@@ -9,31 +9,47 @@
   </head>
   <body>
     <div class="container">
-      <header></header>
-      <!-- <div class="summary">
-        <div>
-          <p>参加选手</p>
-          <p>100</p>
+        <div class="tab">
+            <span class="actived">投 票</span>
+            <span>排行榜</span>
         </div>
-        <div>
-          <p>投票数</p>
-          <p>100</p>
+        <header>
+        <div class="summary">
+            <div class="count_down">
+                <p class="c_d_title">距投票结束还有</p>
+                <p class="c_d_time"></p>
+            </div>
+            <div class="detail_num">
+                <div>
+                    <p>100</p>
+                    <span>参选人数</span>
+                </div>
+                <div>
+                    <p>100</p>
+                    <span>投票数</span>
+                </div>
+                <div>
+                    <p>100</p>
+                    <span>访问量<span>
+                </div>
+            </div>
         </div>
-        <div>
-          <p>访问人数</p>
-          <p>100</p>
+        <div class="search_bar">
+            <input id="searchInput" type="text" placeholder="请输入编号或者姓名">
+            <span id="searchBtn">搜索</span>
         </div>
-      </div> -->
-      <main>
+    </header>
+    <main>
         <div id="masonry" class="masonry"></div>
-      </main>
-      <div id="loading">
-            <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                <path fill="#000000" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50" transform="rotate(171.825 50 50)">
-                  <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
-              </path>
-            </svg>  
-        加载中...</div>
+    </main>
+    <div id="loading">
+        <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+            <path fill="#f85361" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50" transform="rotate(171.825 50 50)">
+                <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+            </path>
+        </svg>
+        加载中...
+    </div>
     </div>
   </body>
 </html>

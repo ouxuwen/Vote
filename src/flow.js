@@ -34,20 +34,29 @@ function calLastHeight() {
 
 let deCal = debounce(calLastHeight, 300);
 
+// 节流参数：
+let canEXT = true;
 
-let i = 1;
+// 执行计数器
+let k = 1;
+
 export default function waterFall() {
-  // 求函数执行次数
-  console.log(++i);
-  // 1- 确定图片的宽度 - 滚动条宽度
-  var pageWidth = getClient().width;
-  var columns = 2; //2列
+  //确定列间隔,行间隔
+  const C_INTERVAL = 6,
+    L_INTERVAL = 15;
+  //2列
+  const columns = 2;
+  // 1- 确定图片的宽度
+  var pageWidth = getClient().width - C_INTERVAL * (columns + 1);
+
   var itemWidth = parseInt(pageWidth / columns); //得到item的宽度
   $(".item").width(itemWidth); //设置到item的宽度
 
   var arr = [];
 
   $(".masonry .item").each(function(i) {
+    // 求函数执行次数
+    // console.log(++k);
     var height = $(this)
       //   .find("img")
       .height();
@@ -55,14 +64,16 @@ export default function waterFall() {
       .find("img")
       .width();
     var bi = itemWidth / width; //获取缩小的比值
-    var boxheight = parseInt(height * bi); //图片的高度*比值 = item的高度
+    var boxheight = parseInt(height * bi) + L_INTERVAL; //图片的高度*比值 = item的高度
 
     if (i < columns) {
       // 2- 确定第一行
       $(this).css({
+        opacity:1,
         top: 0,
-        left: itemWidth * i
+        left: itemWidth * i + C_INTERVAL * (i + 1)
       });
+     
       arr.push(boxheight);
     } else {
       // 其他行
@@ -78,6 +89,7 @@ export default function waterFall() {
       // 4- 设置下一行的第一个盒子位置
       // top值就是最小列的高度
       $(this).css({
+        opacity:1,
         top: arr[index],
         left: $(".masonry .item")
           .eq(index)
@@ -88,6 +100,7 @@ export default function waterFall() {
       // 最小列的高度 = 当前自己的高度 + 拼接过来的高度
       arr[index] = arr[index] + boxheight;
     }
+    
   });
   deCal();
 }
