@@ -47,7 +47,8 @@ export default function waterFall() {
   //2列
   const columns = 2;
   // 1- 确定图片的宽度
-  var pageWidth = getClient().width - C_INTERVAL * (columns + 1);
+  // var pageWidth = getClient().width - C_INTERVAL * (columns + 1);
+  var pageWidth = $(".container").offset().width - C_INTERVAL * (columns + 1);
 
   var itemWidth = parseInt(pageWidth / columns); //得到item的宽度
   $(".item").width(itemWidth); //设置到item的宽度

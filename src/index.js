@@ -164,27 +164,19 @@ let votePm = {
         for (let i = 0,length=list.length; i <  length; i++) {
             // onload="loadImg(this)" onerror="errorImg(this)"
             let listItem = list[i];
-            str += `<div class="item">
-                            <span class="label">${listItem.id}</span>
-                            <img class="lazy"  src=${
-                                listItem.hoverUrl
-                            } alt="图片加载失败" />
-                            <p class = "name">${listItem.fromUrlHost}</p>
-                            <p class="txt">${listItem.oriTitle}</p>
-                            <div class="operation">
-                                <p><span>100</span> 票</p>
-                                <button class="btn">投他一票</button>
-                            </div>
-                        </div>`;
+           
 
           // 所有图片都加载完之后再进行插入
           let img = new Image()
           img.src =  listItem.hoverUrl;
           img.onload = function(){
             j++;
+            str += that.assemblyTemplate(listItem);
             that.excuAppend(j,length,that,str)
           }
           img.onerror = function(){
+            listItem.hoverUrl="assets/image/shootcut.png";
+            str += that.assemblyTemplate(listItem);
             j++;
             that.excuAppend(j,length,that,str)
           }
@@ -196,6 +188,25 @@ let votePm = {
       }
     });
   },
+  /**
+   * 组装模板
+   * @param {*} listItem 
+   */
+  assemblyTemplate(listItem){
+    return `<div class="item">
+        <span class="label">${listItem.id}</span>
+        <img class="lazy"  src=${
+            listItem.hoverUrl
+        } />
+        <p class = "name">${listItem.fromUrlHost}</p>
+        <p class="txt">${listItem.oriTitle}</p>
+        <div class="operation">
+            <p><span>100</span> 票</p>
+            <button class="btn">投他一票</button>
+        </div>
+    </div>`;
+  },
+
   /**
    * 显示loading
    * @param {*} that 
