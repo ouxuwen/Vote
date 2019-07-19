@@ -23,6 +23,12 @@ let votePm = {
   timeEle:null,      // 定时器容器
   endDate:(new Date(end).getTime() - new Date().getTime())/1000, // 时间差
   timer:null,   //定时器
+  infoEle:null,  //消息提醒
+  searchParam:{
+    keyword:"动漫",
+    pageNo:1,
+    pageSize:20
+  },
   /**
    * 初始化
    */
@@ -33,6 +39,7 @@ let votePm = {
     this.searchBtn=$("#searchBtn");
     this.searchInput=$("#searchInput");
     this.timeEle = $(".c_d_time")[0];
+    this.infoEle = $("#info");
     // 注册绑定事件
     this.bindEvent();
 
@@ -53,6 +60,7 @@ let votePm = {
       var windowHeight = $(this).height();
       if (scrollTop + windowHeight == scrollHeight) {
         console.log(scrollTop, scrollHeight, windowHeight, "已经到最底部了！");
+        that.searchParam.pageNo = that.searchParam.pageNo+1;
         that.loadData();
       }
     });
@@ -60,10 +68,31 @@ let votePm = {
     //搜索事件
     that.searchBtn.on("click",function(){
         that.masonry.html("");
-        that.masonry.css({height:0})
-        that.loadData({
-            keyword:that.searchInput[0].value
-        })
+        that.masonry.css({height:0});
+        that.searchParam={
+            keyword:that.searchInput[0].value,
+            pageNo:1,
+            pageSize:20
+        }
+    })
+
+    //投票事件
+    $(".btn").live("click",function(){
+        let $span = $(this).siblings("p").children("span")
+        let num = $span.text();
+        $span.text(+num+1);
+        let infoEle = document.createElement('div');
+        $(infoEle).text('投票成功');
+        $(infoEle).addClass("info");
+        document.body.appendChild(infoEle);
+
+        
+        $(infoEle).addClass("show")
+        setTimeout(()=>{
+            document.body.removeChild(infoEle);
+        },1000)
+        
+
     })
   },
   /**
@@ -110,9 +139,9 @@ let votePm = {
    * 发起请求
    * @param {*} param0 
    */
-  loadData({keyword}={keyword:"动漫"}) {
+  loadData() {
     let that = this;
-
+    let {pageNo,pageSize,keyword} = this.searchParam
     // 防止重复执行咯
     if (this.isLoading) {
       return;
@@ -125,7 +154,7 @@ let votePm = {
       type: "get",
       dataType: "json",
       url:
-        `/sf/vsearch/image/search/wisesearchresult?tn=wisejsonala&ie=utf-8&fromsf=1&word=${keyword}&pn=30&rn=30&gsm=1e&searchtype=0&prefresh=undefined&fromfilter=0`,
+        `/sf/vsearch/image/search/wisesearchresult?tn=wisejsonala&ie=utf-8&fromsf=1&word=${keyword}&pn=${pageNo*pageSize+1}&rn=${pageSize}&gsm=1e&searchtype=0&prefresh=undefined&fromfilter=0`,
       success(res) {
         // that.isLoading = false;
         // that.hideLoading(that);
@@ -159,9 +188,7 @@ let votePm = {
             j++;
             that.excuAppend(j,length,that,str)
           }
-          
         }
-       
       },
       error(err) {
         that.isLoading = false;
