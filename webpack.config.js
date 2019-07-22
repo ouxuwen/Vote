@@ -34,9 +34,10 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
-    port: 80,
+    port: 801,
     proxy: {
-      "/sf":{target: "https://m.baidu.com/", secure: false}
+      "/sf":{target: "https://m.baidu.com/", secure: false},
+      "/litong":{target: "http://localhost/", secure: false},
     },
     disableHostCheck: true,
   },

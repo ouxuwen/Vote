@@ -280,22 +280,117 @@ body {
   }
 }
 
+#noData{
+    text-align: center;
+    padding: 20px;
+    display: none;
+    &.show{
+        display: block;
+    }
+}
+
 .info{
     position: fixed;
     top:100vh;
     left: 50%;
-    width: 200px;
+    padding:0 15px;
+    min-width: 200px;
     height: 36px;
     line-height: 36px;
     text-align: center;
     border-radius: 4px;
     color:#fff;
     background: rgba(0, 0, 0, 0.52);
-    margin-left: -100px;
+    transform: translateX(-50%);
     z-index: -100;
     &.show{
-        animation: slideTop 1s  linear;
+        animation: slideTop 1.5s  linear;
         z-index: 100;
+    }
+    &.success{
+        color: #fff;
+        background-color: #53c41a;
+        animation: feak 1.5s  linear;
+    }
+    &.error{
+        color: #fff;
+        animation: feak 1.5s  linear;
+    }
+}
+
+#loginBox{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 90;
+    display: none;
+    &.show{
+        display: flex;
+    }
+    div{
+        width: 80%;
+        height: 160px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        input{
+            height: 32px;
+            padding: 4px 11px;
+            color: rgba(0,0,0,0.65);
+            font-size: 14px;
+            line-height: 32px;
+            background-color: #fff;
+            border:none;
+            border-bottom: 1px solid #1890ff;
+            outline: none;
+            width: 180px;
+        }
+        button{
+            margin-top:10px;
+            touch-action: manipulation;
+            height: 32px;
+            padding: 0 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            line-height: 1.499;
+            position: relative;
+            display: inline-block;
+            font-weight: 400;
+            white-space: nowrap;
+            text-align: center;
+            color: #fff;
+            background-color: #1890ff;
+            border:none;
+            outline: none;
+            width: 202px;
+        }
+    }
+}
+
+#loadingBox{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.02);
+    z-index: 200;
+    display: none;
+    svg {
+        width: 70px;
+    }
+    &.show {
+        display: flex;
     }
 }
 
@@ -310,6 +405,17 @@ body {
     }
     100% {
         top:40vh;
+        opacity: 1;
+    }
+}
+
+@keyframes feak{
+    0% {
+        top:50vh;
+        opacity: 1;
+    } 
+    100%{
+        top:50vh;
         opacity: 1;
     }
 }
