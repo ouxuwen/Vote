@@ -29,7 +29,7 @@ let votePm = {
   userInfo:false,          //登录人信息
   isNodata:false,         //是否已经没数据
   searchParam:{
-    keyword:"邮轮",
+    keyword:"动漫",
     from:0,
     count:15
   },
