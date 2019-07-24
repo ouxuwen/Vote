@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Vote</title>
+    <title>智能交通研究院“优秀青年代表”</title>
     <script src="js/zepto.min.js"></script>
   </head>
   <body>
@@ -12,8 +12,12 @@
         <span class="actived">投 票</span>
         <span>排行榜</span>
     </div> -->
+  
     <div class="container">
+
         <header>
+        <h3>智能交通研究院“优秀青年代表”</h3>
+        <h3>在线投票活动</h3>
         <div class="summary">
             <div class="count_down">
                 <p class="c_d_title">距投票结束还有</p>
@@ -34,9 +38,15 @@
                 </div>
             </div>
         </div>
-        <div class="search_bar">
+        <!-- <div class="search_bar">
             <input id="searchInput" type="text" placeholder="请输入编号或者姓名">
             <span id="searchBtn">搜索</span>
+        </div> -->
+        <div class="role">
+            【投票规则】每名员工有<strong> 5 </strong>次投票机会，最多可选择<strong> 5 </strong>位优秀青年候选人投票，同一位候选人只能投一票。
+        </div>
+        <div   class="votes">
+            您的剩余票数：<b id="voteCount">5</b>
         </div>
     </header>
     <main>
@@ -52,19 +62,20 @@
         </div>
         <div id="loginBox">
             <div>
+                <p>员工登录</p>
                 <input type="text" placeholder="请输入姓名">
                 <button>登 录</button>
             </div>
         </div>
         <div id="loadingBox">
             <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                <path fill="#1890ff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50" transform="rotate(171.825 50 50)">
+                <path fill="#f85361" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50" transform="rotate(171.825 50 50)">
                     <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
                 </path>
             </svg>
         </div>
-        <div id="noData">
-            没有更多数据了
+        <div id="noData" style="color:red">
+            网络数据异常，请刷新页面
         </div>
     </div>
   </body>

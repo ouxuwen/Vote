@@ -12,7 +12,7 @@ import waterWall from "./flow";
 //   //实现瀑布流
 //   waterFall();
 // };
-let end = "2019-07-22 16:51:00"
+let end = "2019-07-26 16:51:00"
 
 let votePm = {
   loadingComponent: null,
@@ -28,6 +28,7 @@ let votePm = {
   loadingBox:null,   //加载box
   userInfo:false,          //登录人信息
   isNodata:false,         //是否已经没数据
+  voteCountBox:null,         //票数容器
   searchParam:{
     keyword:"动漫",
     from:0,
@@ -46,6 +47,7 @@ let votePm = {
     this.infoEle = $("#info");
     this.loginBox = $("#loginBox");
     this.loadingBox = $("#loadingBox");
+    this.voteCountBox = $("#voteCount");
 
     //检测
     this.visit();
@@ -57,7 +59,7 @@ let votePm = {
     this.bindEvent();
 
     // 第一次加载数据
-    this.testData();
+    this.loadData();
 
     // 开始倒计时
     this.countDown();
@@ -67,17 +69,17 @@ let votePm = {
     let that = this;
 
     // 给滚动条添加滚动监听事件
-    $(window).scroll(function() {
-      var scrollTop = $(this).scrollTop();
-      var scrollHeight = $(document).height();
-      var windowHeight = $(this).height();
-      if (scrollTop + windowHeight == scrollHeight) {
-        console.log(scrollTop, scrollHeight, windowHeight, "已经到最底部了！");
-        if(that.isNodata){return;}
-        that.searchParam.from = that.searchParam.from+that.searchParam.count;
-        that.testData();
-      }
-    });
+    // $(window).scroll(function() {
+    //   var scrollTop = $(this).scrollTop();
+    //   var scrollHeight = $(document).height();
+    //   var windowHeight = $(this).height();
+    //   if (scrollTop + windowHeight == scrollHeight) {
+    //     console.log(scrollTop, scrollHeight, windowHeight, "已经到最底部了！");
+    //     if(that.isNodata){return;}
+    //     that.searchParam.from = that.searchParam.from+that.searchParam.count;
+    //     that.testData();
+    //   }
+    // });
 
     //搜索事件
     that.searchBtn.on("click",function(){
@@ -93,23 +95,50 @@ let votePm = {
 
     //投票事件
     $(".btn").live("click",function(){
-        if(that.userInfo.is_vote){
-            that.showMessage("info","您已经投过票啦",1400)
+        let $this = $(this);
+        if(that.endDate<=0){
+          that.showMessage("info","投票已过期",1400)
+          return
+        }
+        if($this.hasClass('inactive')){
+            that.showMessage("info","不能重复投票哦",1400)
             return
         }
-        let $span = $(this).siblings("p").children("span")
+        if(that.userInfo.vote_record.length === 5){
+            that.showMessage("info","您已经没有票数啦",1400)
+            return
+        }
+        let $span = $this.siblings("p").children("span")
         let num = $span.text();
         $span.text(+num+1);
+        $this.addClass('inactive');
+        $this.text('已投票');
         that.showMessage("","投票成功",1400);
-        that.userInfo.is_vote = $(this).attr('item');
-        that.vote(that.userInfo.id,that.userInfo.is_vote,$span)
+        that.voteCountBox.text(+that.voteCountBox.text()-1);
+        that.vote(that.userInfo.id,$this.attr('item'),$span,$this)
 
 
     })
 
     //登录事件
     $("#loginBox button").on("click",function(){
-        that.login($.trim($("#loginBox input")[0].value))
+        let val = $.trim($("#loginBox input")[0].value);
+        if(!val) {
+          that.showMessage("error","请输入姓名",1500);
+          return;
+        }
+        that.login(val)
+    })
+
+    //手机enter
+    $("#loginBox input").on("keyup",function(e){
+        if(e.keyCode !== 13)return;
+        let val = $.trim($("#loginBox input")[0].value);
+        if(!val) {
+          that.showMessage("error","请输入姓名",1500);
+          return;
+        }
+        that.login(val)
     })
     
   },
@@ -160,7 +189,6 @@ let votePm = {
    */
   loadData(){
     let that = this;
-    let {from,count,keyword} = this.searchParam
     // 防止重复执行咯
     if (this.isLoading) {
       return;
@@ -173,7 +201,7 @@ let votePm = {
         type: "get",
         dataType: "json",
         url:
-          `/litong/public/index.php/index/index/voter?keyword=${keyword}&from=${from}&count=${count}`,
+          `/litong/public/index.php/index/index/voter`,
         success(result) {
           let res = JSON.parse(result);
           let list = res.data;
@@ -181,7 +209,7 @@ let votePm = {
           let j = 0;
           for (let i = 0,length=list.length; i <  length; i++) {
               let listItem = list[i];
-             
+              
             // 所有图片都加载完之后再进行插入
             let img = new Image()
             img.src =  listItem.image;
@@ -190,18 +218,18 @@ let votePm = {
               str += that.assemblyTemplate(listItem);
               that.excuAppend(j,length,that,str)
             }
-            img.onerror = function(){
-              console.log(img.src)
-              listItem.hoverUrl="assets/image/shootcut.png";
-              str += that.assemblyTemplate(listItem);
-              j++;
-              that.excuAppend(j,length,that,str)
-            }
+            // img.onerror = function(){
+            //   listItem.hoverUrl="assets/image/shootcut.png";
+            //   str += that.assemblyTemplate(listItem);
+            //   j++;
+            //   that.excuAppend(j,length,that,str)
+            // }
           }
         },
         error(err) {
           that.isLoading = false;
           that.hideLoading(that);
+          that.showNoData()
         }
       });
   },
@@ -266,12 +294,12 @@ let votePm = {
     return `<div class="item">
         <span class="label">${listItem.id}</span>
         <img class="lazy"  src=${
-            listItem.hoverUrl
+            listItem.image
         } />
-        <p class = "name">${listItem.fromUrlHost}</p>
-        <p class="txt">${listItem.oriTitle}</p>
+        <p class = "name">${listItem.name}</p>
+        <p class="txt">${listItem.des}</p>
         <div class="operation">
-            <p><span>100</span> 票</p>
+            <p><span>${listItem.votes}</span> 票</p>
             <button item=${listItem.id} class="btn">投他一票</button>
         </div>
     </div>`;
@@ -302,6 +330,10 @@ let votePm = {
             waterWall()
             that.isLoading = false;
             that.hideLoading(that);
+            if(that.userInfo){
+              that.changeStatus(that);
+            }
+          
         },1000);
     }
   },
@@ -322,12 +354,16 @@ let votePm = {
     },delay)
   },
   checkLogin(){
-    let isLogin = localStorage['isLogin'] ? JSON.parse(localStorage['isLogin']):null
-    if(!isLogin && !this.loginBox.hasClass("show")){
+    let userInfo = localStorage['userInfo'] ? JSON.parse(localStorage['userInfo']):null;
+    let that = this;
+    if(!userInfo && !this.loginBox.hasClass("show")){
         this.loginBox.addClass("show")
     }
-    if(isLogin){
-        this.userInfo = isLogin;
+    if(userInfo){
+        this.userInfo = userInfo;
+        this.login(this.userInfo.name);
+        // that.voteCountBox.text(5-that.userInfo.vote_record.length);
+        // that.changeStatus(that);
     }
 
   },
@@ -347,7 +383,9 @@ let votePm = {
    */
   login(name){
     let that = this;
-    that.showLoadingBox();
+    if(!localStorage['userInfo']){that.showLoadingBox();} 
+    localStorage.removeItem("userInfo");
+    this.userInfo = null;
     $.ajax({
         type: "post",
         dataType: "json",
@@ -357,16 +395,19 @@ let votePm = {
             that.hideLoadingBox();
             let res = JSON.parse(result)
             if(res['code'] == 1){
-                localStorage['isLogin'] = JSON.stringify( res.data)
-                that.loginBox.removeClass('show');
+                localStorage['userInfo'] = JSON.stringify( res.data)
+                that.userInfo = res.data;
+                that.loginBox.hasClass("show")&&that.loginBox.removeClass('show');
                 that.showMessage("success","登录成功",2000)
+                that.voteCountBox.text(5-that.userInfo.vote_record.length);
+                that.changeStatus(that)
             }else{
                 that.showMessage("error",res['msg'],2000)
             }
         },
         error(err) {
            that.hideLoadingBox()
-           that.showMessage("error",JSON.stringify(err),4000)
+           that.showMessage("error","网络链接失败，请稍后重试",4000)
         }
     });
   },
@@ -375,7 +416,7 @@ let votePm = {
    * @param {*} nid 
    * @param {*} id 
    */
-  vote(nid,id,$span){
+  vote(nid,id,$span,$btn){
     let that = this; 
     $.ajax({
         type: "post",
@@ -386,18 +427,32 @@ let votePm = {
           
             let res = JSON.parse(result)
             if(res['code'] == 1){
-                localStorage['isLogin'] = JSON.stringify(that.userInfo)
+              that.userInfo.vote_record = res.data; 
+              localStorage['userInfo'] = JSON.stringify(that.userInfo);
+              that.visit();
             }else{
                 that.showMessage("error",res['msg'],2000);
-                that.userInfo.is_vote = res.data.is_vote;
-                localStorage['isLogin'] = JSON.stringify(that.userInfo)
+                if(res['code'] == 0){
+                  // $btn.addClass('inactive');
+                  // $btn.text('投他一票');
+                }else if (res['code']  ==2){
+                  $btn.removeClass('inactive');
+                  $btn.text('投他一票');
+                }
+               
+                that.userInfo.vote_record = res.data;
+                localStorage['userInfo'] = JSON.stringify(that.userInfo);
+
                 $span.text(+$span.text() - 1)
+                that.voteCountBox.text(+that.voteCountBox.text()+1);
             }
         },
         error(err) {
-           $span.text(+$span.text() - 1)
-           that.showMessage("error","投票失败，请再投一次",2000)
-           that.userInfo.is_vote = null
+           $span.text(+$span.text() - 1);
+           that.showMessage("error","投票失败，请再投一次",2000);
+           $btn.removeClass('inactive');
+           $btn.text('投他一票');
+           that.voteCountBox.text(+that.voteCountBox.text()+1);
         }
     });
   },
@@ -412,14 +467,14 @@ let votePm = {
           
             let res = JSON.parse(result)
             if(res['code'] == 1){
-                $("#u_count").text(res.data.u)
-                $("#v_count").text(res.data.v)
+                $("#v_count").text(res.data.u)
+                $("#u_count").text(res.data.v)
                 $("#l_count").text(res.data.l)
 
             }
         },
         error(err) {
-            that.showMessage("error","请刷新页面",2000);
+            that.showMessage("error","网络链接失败，请刷新页面",2000);
         }
     });
   },
@@ -430,6 +485,21 @@ let votePm = {
   hideNoData(){
     $("#noData").hasClass("show") && $("#noData").removeClass('show');
     this.isNodata = false;
+  },
+  /**
+   * 计算按钮样式
+   * @param {*} that 
+   */
+  changeStatus(that){
+    
+    $(".btn").forEach(el=>{
+      let $el = $(el)
+      that.userInfo.vote_record.forEach(vr =>{
+        if(vr.vid ==  $el.attr('item')){
+          if( !$el.hasClass("inactive")){  $el.addClass("inactive") ,$el.text("已投票")}
+        }
+      })
+    })
   }
 
 

@@ -1,5 +1,8 @@
 @import "./normalize.css";
 @MIAN_COLOR: #f85361;
+@START_COLOR: #f85361;
+@END_COLOR:#fa8951;
+@SHADOW_COLOR:#F92A82;
 
 body {
   background: #fafafa;
@@ -29,9 +32,16 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   header {
-    background: linear-gradient(to bottom, #f85361, #fa8951);
+    background: linear-gradient(to bottom, @START_COLOR, @END_COLOR);
     padding: 20px 0;
     margin-bottom: 10px;
+    h3{
+      text-align: center;
+      font-size: 20px;
+      color:#ffffff;
+      line-height: 24px;
+      font-weight: bold;
+    }
     .search_bar {
       height: 36px;
       width: 80%;
@@ -56,6 +66,14 @@ body {
         line-height: 36px;
       }
     }
+    .role{
+      color:#fff;
+      padding:10px 15px;
+    }
+    .votes{
+      color:#fff;
+      padding:10px 15px;
+    }
   }
   .summary {
     padding: 20px 0;
@@ -63,6 +81,7 @@ body {
     margin: 0 auto;
     border-radius: 4px;
     background: #ffffff;
+    margin-top: 20px;
     .count_down {
       color: @MIAN_COLOR;
       .c_d_title {
@@ -110,7 +129,7 @@ body {
           font-size: 12px;
         }
         &:not(:last-child) {
-          border-right: 1px solid #ff848e;
+          border-right: 1px solid @MIAN_COLOR;
         }
       }
     }
@@ -195,7 +214,11 @@ body {
         border-radius: 15px;
         cursor: pointer;
         outline: none;
-        box-shadow: 0 3px 8px #F92A82
+        box-shadow: 0 3px 8px @SHADOW_COLOR;
+        &.inactive{
+          background: #b8b8b8;
+          box-shadow: 0 3px 8px #b8b8b8;
+        }
       }
     }
   }
@@ -309,7 +332,7 @@ body {
     }
     &.success{
         color: #fff;
-        background-color: #53c41a;
+        background-color: rgba(0, 0, 0, 0.52);
         animation: feak 1.5s  linear;
     }
     &.error{
@@ -332,6 +355,11 @@ body {
     &.show{
         display: flex;
     }
+    p{
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
     div{
         width: 80%;
         height: 160px;
@@ -349,7 +377,7 @@ body {
             line-height: 32px;
             background-color: #fff;
             border:none;
-            border-bottom: 1px solid #1890ff;
+            border-bottom: 1px solid @MIAN_COLOR;
             outline: none;
             width: 180px;
         }
@@ -367,7 +395,7 @@ body {
             white-space: nowrap;
             text-align: center;
             color: #fff;
-            background-color: #1890ff;
+            background-color: @MIAN_COLOR;
             border:none;
             outline: none;
             width: 202px;
