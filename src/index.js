@@ -140,6 +140,12 @@ let votePm = {
         }
         that.login(val)
     })
+
+    //退出事件
+    $("#logout").on("click",function(){
+      localStorage.removeItem("userInfo");
+      that.loginBox.addClass('show');
+    })
     
   },
   /**
@@ -297,7 +303,10 @@ let votePm = {
             listItem.image
         } />
         <p class = "name">${listItem.name}</p>
-        <p class="txt">${listItem.des}</p>
+        <p class="dep" >${listItem.department}--${listItem.position} </p>
+        <p class="txt">获奖情况：<br>${listItem.jiang}</p>
+        <p class="txt">个人简介：<br>${listItem.des}</p>
+        
         <div class="operation">
             <p><span>${listItem.votes}</span> 票</p>
             <button item=${listItem.id} class="btn">投他一票</button>
