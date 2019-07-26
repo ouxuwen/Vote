@@ -62,7 +62,7 @@ export default function waterFall() {
       //   .find("img")
       .height();
     var width = $(this)
-      .find("img")
+      // .find("img")
       .width();
     var bi = itemWidth / width; //获取缩小的比值
     var boxheight = parseInt(height * bi) + L_INTERVAL; //图片的高度*比值 = item的高度

@@ -12,7 +12,15 @@ import waterWall from "./flow";
 //   //实现瀑布流
 //   waterFall();
 // };
-let end = "2019-08-06 24:00:00"
+let end = "2019-08-06 24:00:00";
+
+window.loadimg = function(){ 
+    waterWall() 
+}
+
+window.errorImg = function(){ 
+  waterWall() 
+}
 
 let votePm = {
   loadingComponent: null,
@@ -165,7 +173,6 @@ let votePm = {
   countDown(){
     let that = this;
     this.endDate = this.endDate - 1;
-    console.log(this.endDate)
     if(this.endDate<=0){
         clearTimeout(this.timer)
         this.timer = null;
@@ -215,15 +222,10 @@ let votePm = {
           let j = 0;
           for (let i = 0,length=list.length; i <  length; i++) {
               let listItem = list[i];
+              str += that.assemblyTemplate(listItem);
               
             // 所有图片都加载完之后再进行插入
-            let img = new Image()
-            img.src =  listItem.image;
-            img.onload = function(){
-              j++;
-              str += that.assemblyTemplate(listItem);
-              that.excuAppend(j,length,that,str)
-            }
+           
             // img.onerror = function(){
             //   listItem.hoverUrl="assets/image/shootcut.png";
             //   str += that.assemblyTemplate(listItem);
@@ -231,6 +233,7 @@ let votePm = {
             //   that.excuAppend(j,length,that,str)
             // }
           }
+          that.excuAppend(that,str)
         },
         error(err) {
           that.isLoading = false;
@@ -299,9 +302,9 @@ let votePm = {
   assemblyTemplate(listItem){
     return `<div class="item">
         <span class="label">${listItem.id}</span>
-        <img class="lazy"  src=${
+        <img class="lazy" onload="loadimg()" onerror="errorImg()" src=${
             listItem.image
-        } />
+        } alt=" "/>
         <p class = "name">${listItem.name}</p>
         <p class="dep" >${listItem.department}--${listItem.position} </p>
         <p class="txt">获奖情况：<br>${listItem.jiang}</p>
@@ -332,19 +335,16 @@ let votePm = {
    * 处理插入元素，处理瀑布流
    * @param {*} that 
    */
-  excuAppend(j,length,that,str){
-    if(j === length){
-        that.masonry.append(str);
-        setTimeout(()=>{
-            waterWall()
-            that.isLoading = false;
-            that.hideLoading(that);
-            if(that.userInfo){
-              that.changeStatus(that);
-            }
-          
-        },1000);
-    }
+  excuAppend(that,str){
+    that.masonry.append(str);
+    that.isLoading = false;
+    that.hideLoading(that);
+    setTimeout(()=>{
+      if(that.userInfo){
+        that.changeStatus(that);
+      }
+    },200)
+    
   },
   /**
    * 消息提示
