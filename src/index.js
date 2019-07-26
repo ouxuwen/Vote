@@ -12,7 +12,7 @@ import waterWall from "./flow";
 //   //实现瀑布流
 //   waterFall();
 // };
-let end = "2019-07-26 16:51:00"
+let end = "2019-08-06 24:00:00"
 
 let votePm = {
   loadingComponent: null,
