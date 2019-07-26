@@ -153,6 +153,11 @@ let votePm = {
     $("#logout").on("click",function(){
       localStorage.removeItem("userInfo");
       that.loginBox.addClass('show');
+      $(".btn").forEach(el=>{
+        let $btn = $(el);
+        $btn.removeClass('inactive');
+        $btn.text('投他一票');
+      })
     })
     
   },
@@ -308,8 +313,8 @@ let votePm = {
         } alt=" "/>
         <p class = "name">${listItem.name}</p>
         <p class="dep" >${listItem.department}--${listItem.position} </p>
-        <p class="txt">获奖情况：<br>${listItem.jiang}</p>
-        <p class="txt">个人简介：<br>${listItem.des}</p>
+        <p class="txt"><b>获奖情况</b>：<br>${listItem.jiang?listItem.jiang:" 无"}</p>
+        <p class="txt"><b>个人简介</b>：<br>${listItem.des}</p>
         
         <div class="operation">
             <p><span>${listItem.votes}</span> 票</p>
