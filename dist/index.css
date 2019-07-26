@@ -589,6 +589,9 @@ body {
   color: #666;
   line-height: 15px;
 }
+.masonry .item .txt b {
+  color: #f85361;
+}
 .masonry .item .operation {
   display: flex;
   justify-content: space-between;
