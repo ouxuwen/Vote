@@ -29,7 +29,7 @@ let votePm = {
   searchInput:null,    // 搜索输入
   searchBtn:null,     // 搜索按钮
   timeEle:null,      // 定时器容器
-  endDate:(new Date(end).getTime() - new Date().getTime())/1000, // 时间差
+  endDate:(1565107200000 - new Date().getTime())/1000, // 时间差
   timer:null,   //定时器
   infoEle:null,   //消息提醒
   loginBox:null,    //登录box
@@ -172,6 +172,7 @@ let votePm = {
   // 开始倒计时
   countDown(){
     let that = this;
+    console.log(that.endDate)
     this.endDate = this.endDate - 1;
     if(this.endDate<=0){
         clearTimeout(this.timer)
